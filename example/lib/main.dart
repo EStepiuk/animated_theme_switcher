@@ -1,4 +1,5 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:example/with_saving_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
@@ -7,6 +8,7 @@ import 'theme_config.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  
   const MyApp({Key? key}) : super(key: key);
 
   @override
@@ -20,21 +22,54 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Flutter Demo',
           theme: myTheme,
-          home: const MyHomePage(),
+          routes: {
+            '/': (_) => const HomePage(),
+            '/switcher': (_) => const ThemeSwitcherPage(),
+          },
         );
       },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Example'),
+      ),
+      body: ListView.builder(
+        itemCount: 30,
+        itemBuilder: (_, idx) => ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            child: Text('$idx'),
+          ),
+          title: Text('This is item #$idx'),
+          subtitle: Text('This is subtitle of item #$idx'),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.forward),
+        label: const Text('Go theme switcher screen'),
+        onPressed: () => Navigator.pushNamed(context, '/switcher'),
+      ),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class ThemeSwitcherPage extends StatefulWidget {
+  const ThemeSwitcherPage({Key? key}) : super(key: key);
+
+  @override
+  _ThemeSwitcherPageState createState() => _ThemeSwitcherPageState();
+}
+
+class _ThemeSwitcherPageState extends State<ThemeSwitcherPage> {
   int _counter = 0;
 
   void _incrementCounter() {
